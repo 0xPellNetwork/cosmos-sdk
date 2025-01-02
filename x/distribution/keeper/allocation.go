@@ -12,6 +12,41 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
+// wrapAllocateTokens is a wrapper around the AllocateTokens function that
+// allows for the total power to be retrieved from the security module.
+// distriTotalPower = consensusPower - xsecurityPower
+// validatorBondedPower = validatorPower - xsecurityPower
+// Note: Rewards for xsecurity power are distributed by the xsecurity module itself,
+// this function only handles distribution for the remaining consensus power
+func (k Keeper) WrapAllocateTokens(ctx context.Context, totalPreviousPower int64, bondedVotes []abci.VoteInfo) error {
+	// Get total xsecurity power to subtract from consensus power
+	totalPower, err := k.xsecurityKeeper.TotalPower(ctx)
+	if err != nil {
+		return err
+	}
+
+	// Adjust total power by subtracting xsecurity power
+	// The remaining power will be used for distribution calculations
+	totalPreviousPower -= totalPower
+
+	// Adjust each validator's power by subtracting their xsecurity power
+	// xsecurity-related rewards are handled separately by the xsecurity module
+	for i := range bondedVotes {
+		power, err := k.xsecurityKeeper.ValidatorPower(ctx, sdk.ValAddress(bondedVotes[i].Validator.Address))
+		if err != nil {
+			return err
+		}
+
+		if power > bondedVotes[i].Validator.Power {
+			panic("xsecurity power is greater than validator power")
+		}
+
+		bondedVotes[i].Validator.Power -= power
+	}
+
+	return k.AllocateTokens(ctx, totalPower, bondedVotes)
+}
+
 // AllocateTokens performs reward and fee distribution to all validators based
 // on the F1 fee distribution specification.
 func (k Keeper) AllocateTokens(ctx context.Context, totalPreviousPower int64, bondedVotes []abci.VoteInfo) error {

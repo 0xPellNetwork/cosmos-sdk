@@ -38,7 +38,7 @@ func TestSetWithdrawAddr(t *testing.T) {
 	bankKeeper := distrtestutil.NewMockBankKeeper(ctrl)
 	stakingKeeper := distrtestutil.NewMockStakingKeeper(ctrl)
 	accountKeeper := distrtestutil.NewMockAccountKeeper(ctrl)
-
+	xsecurityKeeper := distrtestutil.NewMockXsecurityKeeper(ctrl)
 	accountKeeper.EXPECT().GetModuleAddress("distribution").Return(distrAcc.GetAddress())
 
 	bankKeeper.EXPECT().BlockedAddr(withdrawAddr).Return(false).AnyTimes()
@@ -50,6 +50,7 @@ func TestSetWithdrawAddr(t *testing.T) {
 		accountKeeper,
 		bankKeeper,
 		stakingKeeper,
+		xsecurityKeeper,
 		"fee_collector",
 		authtypes.NewModuleAddress("gov").String(),
 	)
@@ -84,6 +85,7 @@ func TestWithdrawValidatorCommission(t *testing.T) {
 	bankKeeper := distrtestutil.NewMockBankKeeper(ctrl)
 	stakingKeeper := distrtestutil.NewMockStakingKeeper(ctrl)
 	accountKeeper := distrtestutil.NewMockAccountKeeper(ctrl)
+	xsecurityKeeper := distrtestutil.NewMockXsecurityKeeper(ctrl)
 
 	accountKeeper.EXPECT().GetModuleAddress("distribution").Return(distrAcc.GetAddress())
 
@@ -98,6 +100,7 @@ func TestWithdrawValidatorCommission(t *testing.T) {
 		accountKeeper,
 		bankKeeper,
 		stakingKeeper,
+		xsecurityKeeper,
 		"fee_collector",
 		authtypes.NewModuleAddress("gov").String(),
 	)
@@ -141,7 +144,7 @@ func TestGetTotalRewards(t *testing.T) {
 	bankKeeper := distrtestutil.NewMockBankKeeper(ctrl)
 	stakingKeeper := distrtestutil.NewMockStakingKeeper(ctrl)
 	accountKeeper := distrtestutil.NewMockAccountKeeper(ctrl)
-
+	xsecurityKeeper := distrtestutil.NewMockXsecurityKeeper(ctrl)
 	accountKeeper.EXPECT().GetModuleAddress("distribution").Return(distrAcc.GetAddress())
 
 	distrKeeper := keeper.NewKeeper(
@@ -150,6 +153,7 @@ func TestGetTotalRewards(t *testing.T) {
 		accountKeeper,
 		bankKeeper,
 		stakingKeeper,
+		xsecurityKeeper,
 		"fee_collector",
 		authtypes.NewModuleAddress("gov").String(),
 	)
@@ -180,7 +184,7 @@ func TestFundCommunityPool(t *testing.T) {
 	bankKeeper := distrtestutil.NewMockBankKeeper(ctrl)
 	stakingKeeper := distrtestutil.NewMockStakingKeeper(ctrl)
 	accountKeeper := distrtestutil.NewMockAccountKeeper(ctrl)
-
+	xsecurityKeeper := distrtestutil.NewMockXsecurityKeeper(ctrl)
 	accountKeeper.EXPECT().GetModuleAddress("distribution").Return(distrAcc.GetAddress())
 
 	distrKeeper := keeper.NewKeeper(
@@ -189,6 +193,7 @@ func TestFundCommunityPool(t *testing.T) {
 		accountKeeper,
 		bankKeeper,
 		stakingKeeper,
+		xsecurityKeeper,
 		"fee_collector",
 		authtypes.NewModuleAddress("gov").String(),
 	)

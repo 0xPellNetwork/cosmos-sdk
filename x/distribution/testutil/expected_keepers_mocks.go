@@ -105,6 +105,56 @@ func (mr *MockAccountKeeperMockRecorder) SetModuleAccount(arg0, arg1 interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetModuleAccount", reflect.TypeOf((*MockAccountKeeper)(nil).SetModuleAccount), arg0, arg1)
 }
 
+
+// MockXsecurityKeeper is a mock of XsecurityKeeper interface.
+type MockXsecurityKeeper struct {
+	ctrl     *gomock.Controller
+	recorder *MockXsecurityKeeperMockRecorder
+}
+
+// MockXsecurityKeeperMockRecorder is the mock recorder for MockXsecurityKeeper.
+type MockXsecurityKeeperMockRecorder struct {
+	mock *MockXsecurityKeeper
+}
+
+// NewMockBankKeeper creates a new mock instance.
+func NewMockXsecurityKeeper(ctrl *gomock.Controller) *MockXsecurityKeeper {
+	mock := &MockXsecurityKeeper{ctrl: ctrl}
+	mock.recorder = &MockXsecurityKeeperMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockXsecurityKeeper) EXPECT() *MockXsecurityKeeperMockRecorder {
+	return m.recorder
+}
+
+
+func (m *MockXsecurityKeeper) ValidatorPower(ctx context.Context, valAddr types.ValAddress) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ValidatorPower", ctx, valAddr)
+	ret0, _ := ret[0].(int64)
+	return ret0, nil
+}
+
+func (mr *MockXsecurityKeeperMockRecorder) ValidatorPower(ctx, valAddr interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidatorPower", reflect.TypeOf((*MockXsecurityKeeper)(nil).ValidatorPower), ctx, valAddr)
+}
+
+
+func (m *MockXsecurityKeeper) TotalPower(ctx context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TotalPower", ctx)
+	ret0, _ := ret[0].(int64)
+	return ret0, nil
+}
+
+func (mr *MockXsecurityKeeperMockRecorder) TotalPower(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TotalPower", reflect.TypeOf((*MockXsecurityKeeper)(nil).TotalPower), ctx)
+}
+
 // MockBankKeeper is a mock of BankKeeper interface.
 type MockBankKeeper struct {
 	ctrl     *gomock.Controller

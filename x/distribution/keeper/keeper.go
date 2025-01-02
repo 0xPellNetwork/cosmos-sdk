@@ -24,7 +24,8 @@ type Keeper struct {
 	stakingKeeper types.StakingKeeper
 	// the address capable of executing a MsgUpdateParams message. Typically, this
 	// should be the x/gov module account.
-	authority string
+	xsecurityKeeper types.XsecurityKeeper
+	authority       string
 
 	Schema  collections.Schema
 	Params  collections.Item[types.Params]
@@ -37,6 +38,7 @@ type Keeper struct {
 func NewKeeper(
 	cdc codec.BinaryCodec, storeService store.KVStoreService,
 	ak types.AccountKeeper, bk types.BankKeeper, sk types.StakingKeeper,
+	xsecurityKeeper types.XsecurityKeeper,
 	feeCollectorName, authority string,
 ) Keeper {
 	// ensure distribution module account is set
@@ -51,6 +53,7 @@ func NewKeeper(
 		authKeeper:       ak,
 		bankKeeper:       bk,
 		stakingKeeper:    sk,
+		xsecurityKeeper:  xsecurityKeeper,
 		feeCollectorName: feeCollectorName,
 		authority:        authority,
 		Params:           collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),

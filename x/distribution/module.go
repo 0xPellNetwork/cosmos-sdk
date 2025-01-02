@@ -213,10 +213,10 @@ type ModuleInputs struct {
 	StoreService store.KVStoreService
 	Cdc          codec.Codec
 
-	AccountKeeper types.AccountKeeper
-	BankKeeper    types.BankKeeper
-	StakingKeeper types.StakingKeeper
-
+	AccountKeeper   types.AccountKeeper
+	BankKeeper      types.BankKeeper
+	StakingKeeper   types.StakingKeeper
+	XsecurityKeeper types.XsecurityKeeper
 	// LegacySubspace is used solely for migration of x/params managed parameters
 	LegacySubspace exported.Subspace `optional:"true"`
 }
@@ -247,6 +247,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AccountKeeper,
 		in.BankKeeper,
 		in.StakingKeeper,
+		in.XsecurityKeeper,
 		feeCollectorName,
 		authority.String(),
 	)

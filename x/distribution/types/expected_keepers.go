@@ -60,3 +60,11 @@ type StakingHooks interface {
 	AfterValidatorCreated(ctx context.Context, valAddr sdk.ValAddress) error // Must be called when a validator is created
 	AfterDelegationModified(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error
 }
+
+// XsecurityKeeper defines the expected interface for the security module
+type XsecurityKeeper interface {
+	// Validator returns validator info by operator address
+	ValidatorPower(context.Context, sdk.ValAddress) (int64, error)
+	// TotalPower returns the total voting power
+	TotalPower(context.Context) (int64, error)
+}
