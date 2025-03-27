@@ -14,6 +14,7 @@ import (
 	types0 "github.com/cosmos/cosmos-sdk/x/params/types"
 	types1 "github.com/cosmos/cosmos-sdk/x/staking/types"
 	gomock "github.com/golang/mock/gomock"
+	corestore "cosmossdk.io/core/store"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -268,6 +269,14 @@ func (mr *MockStakingKeeperMockRecorder) ConsensusAddressCodec() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConsensusAddressCodec", reflect.TypeOf((*MockStakingKeeper)(nil).ConsensusAddressCodec))
 }
 
+// LastValidatorsIterator mocks base method.
+func (m *MockStakingKeeper) LastValidatorsIterator(ctx context.Context) (corestore.Iterator, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LastValidatorsIterator", ctx)
+	ret0, _ := ret[0].(corestore.Iterator)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
 // Delegation mocks base method.
 func (m *MockStakingKeeper) Delegation(arg0 context.Context, arg1 types.AccAddress, arg2 types.ValAddress) (types1.DelegationI, error) {
 	m.ctrl.T.Helper()
