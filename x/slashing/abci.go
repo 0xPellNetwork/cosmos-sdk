@@ -27,12 +27,17 @@ func BeginBlocker(ctx context.Context, k keeper.Keeper) error {
 	// which have missed too many blocks in a row (downtime slashing)
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	for _, voteInfo := range stakingVoteInfo {
-		var blockIdFlag comet.BlockIDFlag
+		blockIdFlag := comet.BlockIDFlagUnknown
+
 		for _, vote := range sdkCtx.VoteInfos() {
 			if bytes.Equal(vote.Validator.Address, voteInfo.Validator.Address) {
 				blockIdFlag = comet.BlockIDFlag(vote.BlockIdFlag)
 				break
 			}
+		}
+		// ignore unknown block id flag
+		if blockIdFlag == comet.BlockIDFlagUnknown {
+			continue
 		}
 
 		if err := k.HandleValidatorSignature(ctx, voteInfo.Validator.Address, voteInfo.Validator.Power, blockIdFlag); err != nil {
