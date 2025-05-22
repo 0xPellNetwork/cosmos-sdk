@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/math"
 
+	corestore "cosmossdk.io/core/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -61,6 +62,7 @@ type StakingKeeper interface {
 
 	// IsValidatorJailed returns if the validator is jailed.
 	IsValidatorJailed(ctx context.Context, addr sdk.ConsAddress) (bool, error)
+	LastValidatorsIterator(ctx context.Context) (corestore.Iterator, error)
 }
 
 // StakingHooks event hooks for staking validator object (noalias)

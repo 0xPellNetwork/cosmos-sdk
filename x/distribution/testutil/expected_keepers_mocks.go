@@ -12,6 +12,7 @@ import (
 	types "github.com/cosmos/cosmos-sdk/types"
 	types0 "github.com/cosmos/cosmos-sdk/x/staking/types"
 	gomock "github.com/golang/mock/gomock"
+	corestore "cosmossdk.io/core/store"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -375,6 +376,14 @@ func (m *MockStakingKeeper) ValidatorByConsAddr(arg0 context.Context, arg1 types
 	return ret0, ret1
 }
 
+// LastValidatorsIterator mocks base method.
+func (m *MockStakingKeeper) LastValidatorsIterator(ctx context.Context) (corestore.Iterator, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LastValidatorsIterator", ctx)
+	ret0, _ := ret[0].(corestore.Iterator)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
 // ValidatorByConsAddr indicates an expected call of ValidatorByConsAddr.
 func (mr *MockStakingKeeperMockRecorder) ValidatorByConsAddr(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()

@@ -12,16 +12,21 @@ import (
 func BeginBlocker(ctx sdk.Context, k keeper.Keeper) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyBeginBlocker)
 
+	stakingVoteInfo, err := k.GetStakingVoteInfo(ctx)
+	if err != nil {
+		return err
+	}
+
 	// determine the total power signing the block
 	var previousTotalPower int64
-	for _, voteInfo := range ctx.VoteInfos() {
+	for _, voteInfo := range stakingVoteInfo {
 		previousTotalPower += voteInfo.Validator.Power
 	}
 
 	// TODO this is Tendermint-dependent
 	// ref https://github.com/cosmos/cosmos-sdk/issues/3095
 	if ctx.BlockHeight() > 1 {
-		if err := k.AllocateTokens(ctx, previousTotalPower, ctx.VoteInfos()); err != nil {
+		if err := k.AllocateTokens(ctx, previousTotalPower, stakingVoteInfo); err != nil {
 			return err
 		}
 	}

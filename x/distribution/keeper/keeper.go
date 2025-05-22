@@ -8,11 +8,14 @@ import (
 	"cosmossdk.io/core/store"
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/log"
+	gogotypes "github.com/cosmos/gogoproto/types"
 
+	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/distribution/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // Keeper of the distribution store
@@ -215,4 +218,32 @@ func (k Keeper) FundCommunityPool(ctx context.Context, amount sdk.Coins, sender 
 
 	feePool.CommunityPool = feePool.CommunityPool.Add(sdk.NewDecCoinsFromCoins(amount...)...)
 	return k.FeePool.Set(ctx, feePool)
+}
+
+// GetStakingVoteInfo returns the last validator set from staking module
+func (k Keeper) GetStakingVoteInfo(ctx context.Context) ([]abci.VoteInfo, error) {
+	res := make([]abci.VoteInfo, 0)
+	iterator, err := k.stakingKeeper.LastValidatorsIterator(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		addr := sdk.ValAddress(stakingtypes.AddressFromLastValidatorPowerKey(iterator.Key()))
+		intV := &gogotypes.Int64Value{}
+
+		if err = k.cdc.Unmarshal(iterator.Value(), intV); err != nil {
+			return nil, err
+		}
+
+		res = append(res, abci.VoteInfo{
+			Validator: abci.Validator{
+				Address: []byte(addr),
+				Power:   intV.Value,
+			},
+		})
+	}
+
+	return res, nil
 }

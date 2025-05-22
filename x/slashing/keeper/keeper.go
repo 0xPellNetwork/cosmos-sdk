@@ -7,12 +7,14 @@ import (
 	storetypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"
+	abci "github.com/cometbft/cometbft/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	gogotypes "github.com/cosmos/gogoproto/types"
 )
 
 // Keeper of the slashing store
@@ -126,4 +128,32 @@ func (k Keeper) Jail(ctx context.Context, consAddr sdk.ConsAddress) error {
 func (k Keeper) deleteAddrPubkeyRelation(ctx context.Context, addr cryptotypes.Address) error {
 	store := k.storeService.OpenKVStore(ctx)
 	return store.Delete(types.AddrPubkeyRelationKey(addr))
+}
+
+// GetStakingVoteInfo returns the last validator set from staking module
+func (k Keeper) GetStakingVoteInfo(ctx context.Context) ([]abci.VoteInfo, error) {
+	res := make([]abci.VoteInfo, 0)
+	iterator, err := k.sk.LastValidatorsIterator(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		addr := sdk.ValAddress(stakingtypes.AddressFromLastValidatorPowerKey(iterator.Key()))
+		intV := &gogotypes.Int64Value{}
+
+		if err = k.cdc.Unmarshal(iterator.Value(), intV); err != nil {
+			return nil, err
+		}
+
+		res = append(res, abci.VoteInfo{
+			Validator: abci.Validator{
+				Address: []byte(addr),
+				Power:   intV.Value,
+			},
+		})
+	}
+
+	return res, nil
 }
