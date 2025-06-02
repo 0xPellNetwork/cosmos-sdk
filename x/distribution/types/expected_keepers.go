@@ -56,6 +56,7 @@ type StakingKeeper interface {
 	GetAllDelegatorDelegations(ctx context.Context, delegator sdk.AccAddress) ([]stakingtypes.Delegation, error)
 
 	LastValidatorsIterator(ctx context.Context) (corestore.Iterator, error)
+	GetValidator(ctx context.Context, addr sdk.ValAddress) (stakingtypes.Validator, error)
 }
 
 // StakingHooks event hooks for staking validator object (noalias)
