@@ -9,12 +9,12 @@ import (
 	reflect "reflect"
 
 	address "cosmossdk.io/core/address"
+	store "cosmossdk.io/core/store"
 	math "cosmossdk.io/math"
 	types "github.com/cosmos/cosmos-sdk/types"
 	types0 "github.com/cosmos/cosmos-sdk/x/params/types"
 	types1 "github.com/cosmos/cosmos-sdk/x/staking/types"
 	gomock "github.com/golang/mock/gomock"
-	corestore "cosmossdk.io/core/store"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -269,14 +269,6 @@ func (mr *MockStakingKeeperMockRecorder) ConsensusAddressCodec() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConsensusAddressCodec", reflect.TypeOf((*MockStakingKeeper)(nil).ConsensusAddressCodec))
 }
 
-// LastValidatorsIterator mocks base method.
-func (m *MockStakingKeeper) LastValidatorsIterator(ctx context.Context) (corestore.Iterator, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "LastValidatorsIterator", ctx)
-	ret0, _ := ret[0].(corestore.Iterator)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
 // Delegation mocks base method.
 func (m *MockStakingKeeper) Delegation(arg0 context.Context, arg1 types.AccAddress, arg2 types.ValAddress) (types1.DelegationI, error) {
 	m.ctrl.T.Helper()
@@ -305,6 +297,21 @@ func (m *MockStakingKeeper) GetAllValidators(ctx context.Context) ([]types1.Vali
 func (mr *MockStakingKeeperMockRecorder) GetAllValidators(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllValidators", reflect.TypeOf((*MockStakingKeeper)(nil).GetAllValidators), ctx)
+}
+
+// GetValidator mocks base method.
+func (m *MockStakingKeeper) GetValidator(ctx context.Context, addr types.ValAddress) (types1.Validator, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetValidator", ctx, addr)
+	ret0, _ := ret[0].(types1.Validator)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetValidator indicates an expected call of GetValidator.
+func (mr *MockStakingKeeperMockRecorder) GetValidator(ctx, addr interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetValidator", reflect.TypeOf((*MockStakingKeeper)(nil).GetValidator), ctx, addr)
 }
 
 // IsValidatorJailed mocks base method.
@@ -348,6 +355,21 @@ func (m *MockStakingKeeper) Jail(arg0 context.Context, arg1 types.ConsAddress) e
 func (mr *MockStakingKeeperMockRecorder) Jail(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Jail", reflect.TypeOf((*MockStakingKeeper)(nil).Jail), arg0, arg1)
+}
+
+// LastValidatorsIterator mocks base method.
+func (m *MockStakingKeeper) LastValidatorsIterator(ctx context.Context) (store.Iterator, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LastValidatorsIterator", ctx)
+	ret0, _ := ret[0].(store.Iterator)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LastValidatorsIterator indicates an expected call of LastValidatorsIterator.
+func (mr *MockStakingKeeperMockRecorder) LastValidatorsIterator(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LastValidatorsIterator", reflect.TypeOf((*MockStakingKeeper)(nil).LastValidatorsIterator), ctx)
 }
 
 // MaxValidators mocks base method.

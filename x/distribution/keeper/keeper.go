@@ -230,16 +230,27 @@ func (k Keeper) GetStakingVoteInfo(ctx context.Context) ([]abci.VoteInfo, error)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		addr := sdk.ValAddress(stakingtypes.AddressFromLastValidatorPowerKey(iterator.Key()))
+		valAddr := sdk.ValAddress(stakingtypes.AddressFromLastValidatorPowerKey(iterator.Key()))
 		intV := &gogotypes.Int64Value{}
 
 		if err = k.cdc.Unmarshal(iterator.Value(), intV); err != nil {
 			return nil, err
 		}
 
+		// Get validator and convert to consensus address
+		validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
+		if err != nil {
+			return nil, err
+		}
+
+		consAddr, err := validator.GetConsAddr()
+		if err != nil {
+			return nil, err
+		}
+
 		res = append(res, abci.VoteInfo{
 			Validator: abci.Validator{
-				Address: []byte(addr),
+				Address: consAddr, // Use consensus address
 				Power:   intV.Value,
 			},
 		})
