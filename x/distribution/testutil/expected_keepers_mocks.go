@@ -9,10 +9,10 @@ import (
 	reflect "reflect"
 
 	address "cosmossdk.io/core/address"
+	store "cosmossdk.io/core/store"
 	types "github.com/cosmos/cosmos-sdk/types"
 	types0 "github.com/cosmos/cosmos-sdk/x/staking/types"
 	gomock "github.com/golang/mock/gomock"
-	corestore "cosmossdk.io/core/store"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -338,6 +338,21 @@ func (mr *MockStakingKeeperMockRecorder) IterateValidators(arg0, arg1 interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IterateValidators", reflect.TypeOf((*MockStakingKeeper)(nil).IterateValidators), arg0, arg1)
 }
 
+// LastValidatorsIterator mocks base method.
+func (m *MockStakingKeeper) LastValidatorsIterator(ctx context.Context) (store.Iterator, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LastValidatorsIterator", ctx)
+	ret0, _ := ret[0].(store.Iterator)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LastValidatorsIterator indicates an expected call of LastValidatorsIterator.
+func (mr *MockStakingKeeperMockRecorder) LastValidatorsIterator(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LastValidatorsIterator", reflect.TypeOf((*MockStakingKeeper)(nil).LastValidatorsIterator), ctx)
+}
+
 // Validator mocks base method.
 func (m *MockStakingKeeper) Validator(arg0 context.Context, arg1 types.ValAddress) (types0.ValidatorI, error) {
 	m.ctrl.T.Helper()
@@ -376,14 +391,6 @@ func (m *MockStakingKeeper) ValidatorByConsAddr(arg0 context.Context, arg1 types
 	return ret0, ret1
 }
 
-// LastValidatorsIterator mocks base method.
-func (m *MockStakingKeeper) LastValidatorsIterator(ctx context.Context) (corestore.Iterator, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "LastValidatorsIterator", ctx)
-	ret0, _ := ret[0].(corestore.Iterator)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
 // ValidatorByConsAddr indicates an expected call of ValidatorByConsAddr.
 func (mr *MockStakingKeeperMockRecorder) ValidatorByConsAddr(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
